@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerFlow Optimizer</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #121212;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+        h1, h2 {
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        h2 {
+            font-size: 1.5em;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #bdbdbd;
+        }
+        textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+            resize: vertical;
+            min-height: 150px;
+            box-sizing: border-box;
+        }
+        input[type="text"] {
+            width: calc(100% - 24px);
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+        }
+        .button-group {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .preview-section {
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid #333;
+        }
+        .preview-section h3 {
+            color: #ffffff;
+            margin-top: 0;
+            border-bottom: 1px solid #444;
+            padding-bottom: 10px;
+        }
+        .preview-content {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #bdbdbd;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        .preview-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: auto;
+            border-radius: 5px;
+        }
+        .score-display {
+            text-align: right;
+            font-weight: bold;
+            color: #81c784;
+            margin-top: 10px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CareerFlow Optimizer</h1>
+
+        <h2>1. Master CV</h2>
+        <label for="masterCV">Your Master CV:</label>
+        <textarea id="masterCV" placeholder="Paste your comprehensive Master CV here."></textarea>
+        <div class="button-group">
+            <button id="saveMasterCV">Save Master CV</button>
+            <button id="editMasterCV">Edit Master CV</button>
+            <button id="deleteMasterCV">Delete Master CV</button>
+        </div>
+
+        <h2>2. Job Description</h2>
+        <div class="button-group">
+            <button id="addTextJD">Add Job Description (Text)</button>
+            <button id="addImageJD">Add Job Description (Image)</button>
+        </div>
+        <div id="jobDescriptionPreview" class="preview-section">
+            <h3>Job Description Preview</h3>
+            <div class="preview-content">
+                <p>No Job Description added yet.</p>
+            </div>
+        </div>
+
+        <h2>3. Optimization & Generation</h2>
+        <div class="button-group">
+            <button id="optimizeCV">Optimize My CV</button>
+            <button id="generateCoverLetter">Generate Cover Letter</button>
+        </div>
+
+        <div id="optimizedCVPreview" class="preview-section">
+            <h3>Optimized CV Preview</h3>
+            <div class="score-display">Initial Score: <span id="initialCVScore">N/A</span> | Optimized Score: <span id="optimizedCVScore">N/A</span></div>
+            <div class="preview-content" id="cvOptimizationOutput">
+                <p>Optimized CV will appear here after processing.</p>
+            </div>
+            <div class="button-group" style="text-align: right; margin-top: 20px;">
+                <button id="downloadOptimizedCV">Download Optimized CV (PDF)</button>
+            </div>
+        </div>
+
+        <div id="coverLetterInputFields" style="display:none;">
+            <h2>4. Cover Letter Details</h2>
+            <div class="input-group">
+                <label for="companyName">Company Name:</label>
+                <input type="text" id="companyName" placeholder="e.g., Google Inc.">
+            </div>
+            <div class="input-group">
+                <label for="contactName">Hiring Manager/Contact Person (Optional):</label>
+                <input type="text" id="contactName" placeholder="e.g., John Smith">
+            </div>
+            <div class="input-group">
+                <label for="jobPosition">Job Position Applying For:</label>
+                <input type="text" id="jobPosition" placeholder="e.g., Senior Marketing Manager">
+            </div>
+            <div class="button-group">
+                <button id="createCoverLetter">Create Cover Letter</button>
+                <button id="cancelCoverLetter" style="background-color: #f44336;">Cancel</button>
+            </div>
+        </div>
+
+        <div id="coverLetterPreviewSection" class="preview-section" style="display:none;">
+            <h3>Cover Letter Preview</h3>
+            <div class="score-display">Relevance Score: <span id="coverLetterScore">N/A</span></div>
+            <div class="preview-content" id="coverLetterOutput">
+                <p>Cover Letter will appear here after generation.</p>
+            </div>
+            <div class="button-group" style="text-align: right; margin-top: 20px;">
+                <button id="downloadCoverLetter">Download Cover Letter (PDF)</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Get all necessary DOM elements ---
+            const masterCVTextArea = document.getElementById('masterCV');
+            const saveMasterCVButton = document.getElementById('saveMasterCV');
+            const editMasterCVButton = document.getElementById('editMasterCV');
+            const deleteMasterCVButton = document.getElementById('deleteMasterCV');
+
+            const addTextJDButton = document.getElementById('addTextJD');
+            const addImageJDButton = document.getElementById('addImageJD');
+            const jobDescriptionPreview = document.getElementById('jobDescriptionPreview');
+            const fileInput = document.createElement('input'); // Create hidden file input for image upload
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.style.display = 'none';
+            document.body.appendChild(fileInput); // Append it to the body
+
+            const optimizeCVButton = document.getElementById('optimizeCV');
+            const generateCoverLetterButton = document.getElementById('generateCoverLetter');
+            const createCoverLetterButton = document.getElementById('createCoverLetter');
+            const cancelCoverLetterButton = document.getElementById('cancelCoverLetter');
+
+            const companyNameInput = document.getElementById('companyName');
+            const contactNameInput = document.getElementById('contactName');
+            const jobPositionInput = document.getElementById('jobPosition');
+
+            const coverLetterInputFields = document.getElementById('coverLetterInputFields');
+            const optimizedCVPreviewSection = document.getElementById('optimizedCVPreview');
+            const downloadOptimizedCVButton = document.getElementById('downloadOptimizedCV');
+            const coverLetterPreviewSection = document.getElementById('coverLetterPreviewSection');
+            const downloadCoverLetterButton = document.getElementById('downloadCoverLetter');
+
+            // --- Master CV Management ---
+
+            // Load Master CV from localStorage on page load
+            const savedMasterCV = localStorage.getItem('masterCVContent');
+            if (savedMasterCV) {
+                masterCVTextArea.value = savedMasterCV;
+                masterCVTextArea.disabled = true; // Disable editing until 'Edit' is clicked
+                saveMasterCVButton.style.display = 'none'; // Hide save button initially if CV exists
+                editMasterCVButton.style.display = 'inline-block';
+                deleteMasterCVButton.style.display = 'inline-block';
+            } else {
+                masterCVTextArea.disabled = false; // Enable if no CV saved yet
+                saveMasterCVButton.style.display = 'inline-block';
+                editMasterCVButton.style.display = 'none';
+                deleteMasterCVButton.style.display = 'none';
+                masterCVTextArea.placeholder = "Paste your comprehensive Master CV here."
+            }
+
+            // Save Master CV
+            saveMasterCVButton.addEventListener('click', function() {
+                if (masterCVTextArea.value.trim() !== '') {
+                    localStorage.setItem('masterCVContent', masterCVTextArea.value.trim());
+                    masterCVTextArea.disabled = true;
+                    saveMasterCVButton.style.display = 'none';
+                    editMasterCVButton.style.display = 'inline-block';
+                    deleteMasterCVButton.style.display = 'inline-block';
+                    alert('Master CV saved successfully!');
+                } else {
+                    alert('Please paste content into the Master CV field before saving.');
+                }
+            });
+
+            // Edit Master CV
+            editMasterCVButton.addEventListener('click', function() {
+                masterCVTextArea.disabled = false;
+                saveMasterCVButton.style.display = 'inline-block';
+                editMasterCVButton.style.display = 'none';
+                // Keep delete button visible during edit
+                alert('You can now edit your Master CV. Remember to click "Save" when done.');
+            });
+
+            // Delete Master CV
+            deleteMasterCVButton.addEventListener('click', function() {
+                if (confirm('Are you sure you want to delete your Master CV? This action cannot be undone.')) {
+                    localStorage.removeItem('masterCVContent');
+                    masterCVTextArea.value = '';
+                    masterCVTextArea.disabled = false;
+                    saveMasterCVButton.style.display = 'inline-block';
+                    editMasterCVButton.style.display = 'none';
+                    deleteMasterCVButton.style.display = 'none';
+                    masterCVTextArea.placeholder = "Master CV deleted. Paste a new one here...";
+                    alert('Master CV deleted.');
+                }
+            });
+
+            // --- Job Description Input ---
+
+            // Handle Add Text Job Description
+            addTextJDButton.addEventListener('click', function() {
+                const jdText = prompt("Please paste the Job Description text here:");
+                if (jdText && jdText.trim() !== '') {
+                    jobDescriptionPreview.innerHTML = `<p>${jdText.trim().replace(/\n/g, '<br>')}</p>`;
+                    // Store JD in localStorage for later use by optimization
+                    localStorage.setItem('jobDescriptionContent', jdText.trim());
+                    localStorage.removeItem('jobDescriptionImage'); // Clear image JD if text is provided
+                    alert('Job Description added successfully!');
+                } else if (jdText !== null) { // If user clicked OK but input was empty
+                    alert('Job Description cannot be empty.');
+                }
+            });
+
+            // Handle Add Image Job Description (Frontend part only)
+            addImageJDButton.addEventListener('click', function() {
+                fileInput.click(); // Programmatically click the hidden file input
+            });
+
+            fileInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        jobDescriptionPreview.innerHTML = `<img src="${e.target.result}" alt="Job Description Image" style="max-width:100%; height:auto; display: block; margin: auto;">`;
+                        // Store the image data URL for persistence, will be sent to backend for OCR
+                        localStorage.setItem('jobDescriptionImage', e.target.result); 
+                        // Clear text JD if image is provided
+                        localStorage.removeItem('jobDescriptionContent'); 
+                        alert('Job Description image uploaded. Text extraction will occur during optimization via AI (backend).');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // --- UI Visibility for Cover Letter and Optimized CV ---
+            generateCoverLetterButton.addEventListener('click', function() {
+                if (masterCVTextArea.value.trim() === '') {
+                    alert('Please save your Master CV first before generating a Cover Letter.');
+                    return;
+                }
+                if (!localStorage.getItem('jobDescriptionContent') && !localStorage.getItem('jobDescriptionImage')) {
+                    alert('Please add a Job Description first before generating a Cover Letter.');
+                    return;
+                }
+
+                // Show Cover Letter related fields and hide CV related output
+                coverLetterInputFields.style.display = 'block';
+                coverLetterPreviewSection.style.display = 'block';
+                optimizedCVPreviewSection.style.display = 'none';
+                downloadOptimizedCVButton.style.display = 'none';
+                optimizeCVButton.style.display = 'none'; // Hide optimize CV button
+                generateCoverLetterButton.style.display = 'none'; // Hide itself
+            });
+
+            cancelCoverLetterButton.addEventListener('click', function() {
+                // Hide Cover Letter related fields and show CV related output
+                coverLetterInputFields.style.display = 'none';
+                coverLetterPreviewSection.style.display = 'none';
+                optimizedCVPreviewSection.style.display = 'block';
+                downloadOptimizedCVButton.style.display = 'inline-block';
+                optimizeCVButton.style.display = 'inline-block'; // Show optimize CV button
+                generateCoverLetterButton.style.display = 'inline-block'; // Show itself
+            });
+
+            // --- Anonymous User Counting ---
+            // This function will generate a unique ID and send a signal to a Firebase Cloud Function
+            async function trackAnonymousUser() {
+                let userId = localStorage.getItem('anonymousUserId');
+
+                if (!userId) {
+                    // Generate a simple unique ID (UUID v4-like)
+                    userId = 'user_' + 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                        const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+                        return v.toString(16);
+                    });
+                    localStorage.setItem('anonymousUserId', userId);
+
+                    try {
+                        // Call a Firebase Cloud Function to increment the user count
+                        // IMPORTANT: 'YOUR_FIREBASE_FUNCTION_URL/trackUsage' is a placeholder.
+                        // We will provide the actual Cloud Function code and URL in a later step.
+                        const response = await fetch('YOUR_FIREBASE_FUNCTION_URL/trackUsage', { 
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ userId: userId, event: 'app_load_unique' }), // Send anonymous data
+                        });
+
+                        if (response.ok) {
+                            console.log('Anonymous user tracked successfully.');
+                        } else {
+                            console.error('Failed to track anonymous user:', response.status, response.statusText);
+                        }
+                    } catch (error) {
+                        console.error('Error tracking anonymous user:', error);
+                    }
+                }
+            }
+
+            // Call the tracking function when the page loads
+            trackAnonymousUser();
+
+            // --- Initial state setup on page load ---
+            coverLetterInputFields.style.display = 'none';
+            coverLetterPreviewSection.style.display = 'none';
+            // Ensure optimizeCV and generateCoverLetter buttons are visible initially
+            optimizeCVButton.style.display = 'inline-block';
+            generateCoverLetterButton.style.display = 'inline-block';
+        });
+    </script>
+</body>
+</html>
